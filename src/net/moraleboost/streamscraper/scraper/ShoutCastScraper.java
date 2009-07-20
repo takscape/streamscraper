@@ -36,7 +36,7 @@ public class ShoutCastScraper implements Scraper
     {
         try {
             byte[] status = fetcher.fetch(uri.resolve("/"));
-            byte[] feed = fetcher.fetch(uri.resolve("7.html"));
+            byte[] feed = fetcher.fetch(uri.resolve("/7.html"));
             
             List<Stream> statusStreams = statusPageParser.parse(uri, status);
             List<Stream> feedStreams = feedParser.parse(uri, feed);
