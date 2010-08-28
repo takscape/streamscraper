@@ -37,26 +37,44 @@ public class IceCastParser implements Parser
 {
     private static final Pattern MOUNTPOINT_PATTERN_231 = Pattern.compile("^(.*)\\.m3u$");
     private static final Pattern MOUNTPOINT_PATTERN_232 = Pattern.compile("^Mount Point (.*)$");
+    public static final String DEFAULT_CHARSET = "Shift_JIS";
+    
+    private String nonUnicodeCharset;
+
+    public IceCastParser()
+    {
+        this.nonUnicodeCharset = DEFAULT_CHARSET;
+    }
+    
+    public void setNonUnicodeCharset(String charset)
+    {
+        this.nonUnicodeCharset = charset;
+    }
+
+    public String getNonUnicodeCharset()
+    {
+        return nonUnicodeCharset;
+    }
     
     public List<Stream> parse(URI uri, byte[] src) throws ParseException
     {
         try {
             CharsetDecoder utf8dec = CharsetUtils.createDecoder(
                     "UTF-8", CodingErrorAction.IGNORE, CodingErrorAction.IGNORE);
-            CharsetDecoder sjisdec = CharsetUtils.createDecoder(
-                    "Shift_JIS", CodingErrorAction.IGNORE, CodingErrorAction.IGNORE);
+            CharsetDecoder nudec = CharsetUtils.createDecoder(
+                    nonUnicodeCharset, CodingErrorAction.IGNORE, CodingErrorAction.IGNORE);
             
             Source utf8src = new Source(CharsetUtils.decode(utf8dec, src));
-            Source sjissrc = new Source(CharsetUtils.decode(sjisdec, src));
+            Source nusrc = new Source(CharsetUtils.decode(nudec, src));
             
             utf8src.fullSequentialParse();
-            sjissrc.fullSequentialParse();
+            nusrc.fullSequentialParse();
             
             List<Stream> utf8streams = new LinkedList<Stream>();
             List<Stream> sjisstreams = new LinkedList<Stream>();
             
             parseSouce(uri, utf8src, utf8streams);
-            parseSouce(uri, sjissrc, sjisstreams);
+            parseSouce(uri, nusrc, sjisstreams);
             
             return mergeStreams(utf8streams, sjisstreams);
         } catch (Exception e) {
@@ -180,17 +198,17 @@ public class IceCastParser implements Parser
         }
     }
     
-    private List<Stream> mergeStreams(List<Stream> utf8streams, List<Stream> sjisstreams)
+    private List<Stream> mergeStreams(List<Stream> utf8streams, List<Stream> nustreams)
     {
         List<Stream> result = new LinkedList<Stream>();
         
-        for (Stream sjis: sjisstreams) {
-            if (isSjisType(sjis.getContentType())) {
-                result.add(sjis);
+        for (Stream nu: nustreams) {
+            if (isNonUnicode(nu.getContentType())) {
+                result.add(nu);
             }
         }
         for (Stream utf8: utf8streams) {
-            if (!isSjisType(utf8.getContentType())) {
+            if (!isNonUnicode(utf8.getContentType())) {
                 result.add(utf8);
             }
         }
@@ -198,7 +216,7 @@ public class IceCastParser implements Parser
         return result;
     }
     
-    private boolean isSjisType(String contentType)
+    private boolean isNonUnicode(String contentType)
     {
         return (contentType != null && (contentType
                 .equalsIgnoreCase("audio/mpeg") || contentType

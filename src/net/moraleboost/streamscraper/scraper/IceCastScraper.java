@@ -19,6 +19,8 @@ package net.moraleboost.streamscraper.scraper;
 import java.net.URI;
 import java.util.List;
 
+import net.moraleboost.streamscraper.Fetcher;
+import net.moraleboost.streamscraper.Parser;
 import net.moraleboost.streamscraper.ScrapeException;
 import net.moraleboost.streamscraper.Scraper;
 import net.moraleboost.streamscraper.Stream;
@@ -27,8 +29,34 @@ import net.moraleboost.streamscraper.parser.IceCastParser;
 
 public class IceCastScraper implements Scraper
 {
-    private HttpFetcher fetcher = new HttpFetcher();
-    private IceCastParser parser = new IceCastParser();
+    private Fetcher fetcher;
+    private Parser parser;
+    
+    public IceCastScraper()
+    {
+        fetcher = new HttpFetcher();
+        parser = new IceCastParser();
+    }
+
+    public Fetcher getFetcher()
+    {
+        return fetcher;
+    }
+
+    public void setFetcher(Fetcher fetcher)
+    {
+        this.fetcher = fetcher;
+    }
+
+    public Parser getParser()
+    {
+        return parser;
+    }
+
+    public void setParser(Parser parser)
+    {
+        this.parser = parser;
+    }
 
     public List<Stream> scrape(URI uri) throws ScrapeException
     {

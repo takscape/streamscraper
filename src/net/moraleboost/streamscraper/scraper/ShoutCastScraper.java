@@ -28,9 +28,46 @@ import net.moraleboost.streamscraper.parser.ShoutCastStatusPageParser;
 
 public class ShoutCastScraper implements Scraper
 {
-    private HttpFetcher fetcher = new HttpFetcher();
-    private ShoutCastStatusPageParser statusPageParser = new ShoutCastStatusPageParser();
-    private ShoutCastFeedParser feedParser = new ShoutCastFeedParser();
+    private HttpFetcher fetcher;
+    private ShoutCastStatusPageParser statusPageParser;
+    private ShoutCastFeedParser feedParser;
+    
+    public ShoutCastScraper()
+    {
+        fetcher = new HttpFetcher();
+        statusPageParser = new ShoutCastStatusPageParser();
+        feedParser = new ShoutCastFeedParser();
+    }
+
+    public HttpFetcher getFetcher()
+    {
+        return fetcher;
+    }
+
+    public void setFetcher(HttpFetcher fetcher)
+    {
+        this.fetcher = fetcher;
+    }
+
+    public ShoutCastStatusPageParser getStatusPageParser()
+    {
+        return statusPageParser;
+    }
+
+    public void setStatusPageParser(ShoutCastStatusPageParser statusPageParser)
+    {
+        this.statusPageParser = statusPageParser;
+    }
+
+    public ShoutCastFeedParser getFeedParser()
+    {
+        return feedParser;
+    }
+
+    public void setFeedParser(ShoutCastFeedParser feedParser)
+    {
+        this.feedParser = feedParser;
+    }
 
     public List<Stream> scrape(URI uri) throws ScrapeException
     {

@@ -34,16 +34,35 @@ import net.moraleboost.streamscraper.util.JerichoHtmlUtils;
 
 public class ShoutCastStatusPageParser implements Parser
 {
+    public static final String DEFAULT_CHARSET = "Shift_JIS";
+    
+    private String charset;
+    
+    public ShoutCastStatusPageParser()
+    {
+        this.charset = DEFAULT_CHARSET;
+    }
+    
+    public void setCharset(String charset)
+    {
+        this.charset = charset;
+    }
+
+    public String getCharset()
+    {
+        return charset;
+    }
+
     public List<Stream> parse(URI uri, byte[] src) throws ParseException
     {
         try {
             CharsetDecoder dec = CharsetUtils.createDecoder(
-                    "Shift_JIS", CodingErrorAction.IGNORE, CodingErrorAction.IGNORE);
-            Source sjissrc = new Source(CharsetUtils.decode(dec, src));
+                    charset, CodingErrorAction.IGNORE, CodingErrorAction.IGNORE);
+            Source usrc = new Source(CharsetUtils.decode(dec, src));
             
-            sjissrc.fullSequentialParse();
+            usrc.fullSequentialParse();
             
-            return parseSource(uri, sjissrc);
+            return parseSource(uri, usrc);
         } catch (Exception e) {
             throw new ParseException(e);
         }
