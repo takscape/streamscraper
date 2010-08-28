@@ -2,12 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/httpclient-4.0-beta2.jar"/>
-	<classpathentry kind="lib" path="lib/httpcore-4.0.jar"/>
-	<classpathentry kind="lib" path="lib/httpcore-nio-4.0.jar"/>
-	<classpathentry kind="lib" path="lib/httpmime-4.0-beta2.jar"/>
-	<classpathentry kind="lib" path="lib/jericho-html-3.1.jar"/>
-	<classpathentry kind="lib" path="lib/commons-io-1.4.jar"/>
-	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?ivyXmlPath=ivy.xml&amp;confs=*"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
