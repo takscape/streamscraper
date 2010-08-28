@@ -59,12 +59,14 @@ public class ShoutCastFeedParser implements Parser
             usrc.fullSequentialParse();
             
             return parseSource(uri, usrc);
+        } catch (ParseException e) {
+            throw e;
         } catch (Exception e) {
             throw new ParseException(e);
         }
     }
     
-    private List<Stream> parseSource(URI uri, Source src)
+    private List<Stream> parseSource(URI uri, Source src) throws ParseException
     {
         String line = src.getTextExtractor().toString();
         String[] attrs = line.split(",", 8);
@@ -84,6 +86,12 @@ public class ShoutCastFeedParser implements Parser
         stream.setUri(uri.resolve("/"));
         try {
             stream.setCurrentListenerCount(Integer.parseInt(attrs[0]));
+        } catch (NumberFormatException e) {}
+        try {
+            int status = Integer.parseInt(attrs[1]);
+            if (status == 0) {
+                throw new ParseException("Server is down.");
+            }
         } catch (NumberFormatException e) {}
         try {
             stream.setPeakListenerCount(Integer.parseInt(attrs[2]));
