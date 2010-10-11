@@ -16,9 +16,11 @@
  */
 package net.moraleboost.streamscraper;
 
+import java.io.Serializable;
 import java.net.URI;
 
-public class Stream
+@SuppressWarnings("serial")
+public class Stream implements Serializable
 {
     private String title;
     private String description;
